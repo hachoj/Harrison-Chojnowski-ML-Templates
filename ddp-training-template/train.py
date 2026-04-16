@@ -37,14 +37,17 @@ def build_param_groups(model, lr_adamw, lr_muon, wd):
 
 
 def train(model, adamw, muon, cfg, device, rank, world_size, is_main):
-    # if cfg.wandb.enabled and is_main:
-    #     wandb.init(
-    #         project=cfg.wandb.project,
-    #         name=cfg.wandb.name,
-    #         dir=cfg.wandb.dir,
-    #         config=OmegaConf.to_container(cfg, resolve=True),
-    #     )
-    pass
+    def log(*args, **kwargs):
+        if is_main:
+            print(*args, **kwargs)
+
+    if cfg.wandb.enabled and is_main:
+        wandb.init(
+            project=cfg.wandb.project,
+            name=cfg.wandb.name,
+            dir=cfg.wandb.dir,
+            config=OmegaConf.to_container(cfg, resolve=True),
+        )
 
 
 if __name__ == "__main__":
@@ -73,7 +76,7 @@ if __name__ == "__main__":
     model = model.to(device=device)
     model = DDP(model, device_ids=[local_rank])
 
-    # just given how idno is normally loaded, I assume for some reason it
+    # just given how DINO is normally loaded, I assume for some reason it
     # default to not being loaded in train mode so I'll just do that once here
     # also set parameters grad = true
     model.train()
