@@ -1,0 +1,22 @@
+model:
+  repo_dir: meta_models/dinov3
+  base_name: dinov3_vits16
+  weights_path: meta_models/DINOv3_weights/dinov3_vits16_pretrain_lvd1689m-08c60483.pth
+
+train:
+  seed: 42
+  num_epochs: 100
+  batch_size: 16
+  grad_accum: 4
+  grad_clip: 1.0
+  lr_adamw: 1e-3
+  lr_muon: 1e-3
+  weight_decay: 0.1
+  checkpoint_dir: checkpoints
+  every_n_checkpoint: 10
+
+wandb:
+  enabled: true
+  project: domain-adapt-sarderlab
+  name: dino-finetune
+  dir: logs
